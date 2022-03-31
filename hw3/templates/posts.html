@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container px-4 py-5">
+    <div class="row" id="add-post-form">
+        <h2>Add post</h2>
+        <div class="col-6">
+            <form action="http://127.0.0.1:5001/posts" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="title" class="form-label">Post title</label>
+                    <input type="text" class="form-control" id="title" name="title" aria-describedby="title_help">
+                    <div id="title_help" class="form-text">Enter your post title</div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="content" class="form-label">Content</label>
+                    <textarea class="form-control" aria-describedby="content_help" name="content"
+                              id="content"></textarea>
+                    <div id="content_help" class="form-text">Fill your post data</div>
+                </div>
+                <div class="mb-3">
+                    <label for="file" class="form-label">File</label>
+                    <input type="file" class="form-control" id="file" name="file">
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="check_private" name="is_private" value="True">
+                    <label class="form-check-label" for="check_private">Is post private?</label>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <br>
+
+    <div class="row">
+        {% for title, content, image_uuid, author_id, author_name, author_surname in posts %}
+        {% if loop.index % 4 == 0 %}
+        <p>
+        </p>
+        {% endif %}
+        <div class="col-3">
+            <div class="card">
+                <img src="http://127.0.0.1:5001/image/{{image_uuid}}" class="card-img-top" alt="PostImage"
+                     style="height: 18rem">
+                <div class="card-body">
+                    <h5 class="card-title">{{title}}</h5>
+                    <p class="card-text">{{content}}</p>
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><h6>Author</h6> {{author_id}}. {{author_surname}} {{author_name}}</li>
+                </ul>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        let user_id = {{user_id | tojson}}
+
+        function DisplayAddFrom() {
+            document.getElementById("add-post-form").style.display = "none";
+        }
+
+        if (user_id == null) {
+            DisplayAddFrom()
+        }
+
+
+    </script>
+    {% endblock %}
+</div>
